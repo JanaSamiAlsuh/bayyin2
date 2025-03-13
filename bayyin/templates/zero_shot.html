@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رفع الملفات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+
+.modal-content p {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    direction: rtl; /* Ensure Arabic text is properly aligned */
+}
+
+
+textarea, input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px; /* Space between inputs */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Tajawal', sans-serif;
+}
+
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.input-group {
+    width: 48%;
+}
+
+
+.submit-ai-btn {
+    background-color: #7d2ae8;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.submit-ai-btn:hover {
+    background-color: #9B7EBD;
+    transform: scale(1.05);
+}
+
+.submit-ai-btn:active {
+    transform: scale(0.95);
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #666;
+}
+
+.close:hover {
+    color: #444;
+}
+
+#ai-modal {
+    display: block; /* Ensure it shows immediately */
+    position: static; /* Remove fixed positioning */
+    transform: none; /* Remove modal centering */
+    width: 100%; /* Adjust width as needed */
+    margin: 20px auto; /* Center the form within the page */
+    box-shadow: none; /* Remove modal shadow */
+}
+
+        .open-ai-modal {
+    background-color: #7d2ae8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.open-ai-modal:hover {
+    background-color: #9B7EBD;
+    transform: scale(1.05);
+}
+
+.open-ai-modal:active {
+    transform: scale(0.95);
+}
+
+        html, body {
+            height: 100%; /* Full height of the viewport */
+            margin: 0; /* Remove default margins */
+            display: flex;
+            flex-direction: column;
+        }
+        .yellow-button {
+    background-color: #007bff; /* Default blue color */
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease; /* Smooth transition */
+    margin-top: 20px;
+}
+
+.yellow-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.yellow-button:active {
+    transform: scale(0.98); /* Slightly smaller when clicked */
+}
+
+
+        input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #7d2ae8;
+    cursor: pointer;
+}
+
+label:hover {
+    text-decoration: underline;
+    color: #7d2ae8;
+}
+
+
+        ::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #7d2ae8;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+
+
+        #previous-files {
+    margin-top: 20px;
+    display: none; /* Initially hidden */
+    border: 2px solid #7d2ae8; /* Purple border */
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #f9f7fc; /* Light purple background */
+    color: #333; /* Text color */
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+    text-align: right;
+
+}
+
+
+
+
+#previous-files.show {
+    display: block;
+    opacity: 1; /* Fully visible */
+    transform: translateY(0);
+}
+
+        #file-options div {
+    display: flex;
+    align-items: center;
+    padding: 10px 0; /* Add spacing between options */
+    border-bottom: 1px solid #eaeaea; /* Light gray separator */
+}
+
+#file-options div:last-child {
+    border-bottom: none; /* Remove the separator for the last item */
+}
+
+input[type="radio"] {
+    margin-left: 10px; /* Space between the radio button and label */
+    accent-color: #7d2ae8; /* Purple color for the radio button */
+    cursor: pointer; /* Indicate that the radio button is clickable */
+}
+
+label {
+    display: block;
+    font-size: 18px; /* Make font larger for better readability */
+    font-weight: bold; /* Make it bold */
+    text-align: right; /* Align text to the right */
+    margin-bottom: 5px; /* Add spacing between label and input */
+    color: #333; /* Improve visibility with a dark gray color */
+    font-family: 'Tajawal', sans-serif; /* Ensure Arabic-friendly font */
+}
+#file-options {
+    max-height: 200px; /* Limit height for better usability */
+    overflow-y: auto; /* Scrollable for long lists */
+    padding-right: 10px; /* Space for scrollbar */
+    scrollbar-width: thin; /* For Firefox */
+}
+
+#file-options::-webkit-scrollbar {
+    width: 8px;
+}
+
+#file-options::-webkit-scrollbar-thumb {
+    background: #7d2ae8;
+    border-radius: 5px;
+}
+
+#file-options::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+hr {
+    border: none;
+    border-top: 2px solid #7d2ae8; /* Blue separator */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+textarea {
+    width: 100%;
+    height: 150px;
+    resize: none;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+textarea::-webkit-scrollbar {
+    width: 8px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background: #7d2ae8;
+    border-radius: 5px;
+}
+
+textarea::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+@media (max-width: 768px) {
+    .modal {
+        width: 90%;  /* Adjusts to smaller screens */
+        max-width: 90%;
+    }
+}
+
+
+        .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    max-width: 1000px;  /* Ensures modal doesn't stretch too wide */
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto; /* Allow scrolling for long content */
+    max-height: 80vh;  /* Prevent modal from getting too large */
+}
+
+.modal-content {
+    margin-top: 150px; /* Adjust this value to increase/decrease space */
+    width: 80%; /* Adjust width for better fit */
+    max-width: 800px; /* Set a max width */
+    background-color: #fff;
+    padding: 30px; /* Add padding for better spacing inside */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
+    text-align: center; /* Center the content */
+}
+/* Ensure background overlay covers full screen */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Dark overlay for better visibility */
+    z-index: 999;
+    display: none;
+}
+
+
+
+
+.modal-content textarea {
+    width: 100%;
+    height: 300px;
+    resize: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    background: #f9f9f9;
+}
+
+.modal-content .continue-btn {
+    background-color: #7d2ae8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    cursor: pointer;
+
+}
+
+.modal-content .continue-btn:hover {
+    background-color: #9B7EBD;
+}
+.file-container {
+    margin-bottom: 20px; /* Space between file content */
+    position: relative; /* Ensure each container has its own scroll context */
+}
+
+
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 20px 30px; /* Reduce padding if necessary */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: fixed; /* Ensures the header stays at the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Ensures the header is above other content */
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+            margin-right: 94px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .nav-links a:hover {
+            color: #007bff;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            display: block;
+            background: #007bff;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-left: 20px;
+        }
+
+        .profile-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        /* General Styling */body {
+    font-family: 'Tajawal', sans-serif;
+    background: linear-gradient(135deg, #e9efff, #f9fcff);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh; /* Ensure body takes full height of the viewport */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+
+        .container {
+    background-color: white;
+    padding: 30px; /* Add padding inside the container to make the content feel more spacious */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 410px; /* Adjust the maximum width to make the container wider */
+    width: 70%; /* Allow the container to adjust responsively to smaller screens */
+    margin-left: 100px;
+            margin-bottom: 150px;
+            margin-top: 130px;
+            margin-right: 100px;
+    text-align: center;
+}
+
+
+
+
+        h1 {
+            color: #7d2ae8;
+        }
+
+        /* File Upload Styling */
+        .file-upload {
+            position: relative;
+            border: 2px dashed #7d2ae8;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: #9B7EBD;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .upload-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            color: #7d2ae8;
+            font-size: 24px;
+        }
+
+        .submit-button {
+            background-color: #7d2ae8;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-button:hover {
+    background-color: #9B7EBD;
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+        .submit-button:active {
+    transform: scale(0.98);
+}
+
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+            text-align: center;
+        }
+
+        footer {
+            background: radial-gradient(circle, #281F54, #7d2ae8);
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            width: 100%;
+            margin-top: auto; /* Ensure footer is always at the bottom */
+        }
+
+        footer .footer-content {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer .footer-content div {
+            margin-bottom: 10px;
+        }
+
+        footer h3 {
+            margin-bottom: 10px;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        footer .social-icons a {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #fff;
+        }
+
+        footer .social-icons a:hover {
+            color: #ccc;
+        }
+
+        footer .footer-content div p {
+            max-width: 300px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        footer p {
+            font-size: 14px;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin: 20px auto;
+        padding: 20px;
+    }
+}
+
+
+        .popup-menu {
+    position: absolute;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    width: 200px;
+    top: 200px; /* Adjust position if needed */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    display: none;
+    text-align: right;
+}
+
+.popup-menu button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: none;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+}
+
+.popup-menu button:hover {
+    background-color: #f0f0f0;
+}
+
+
+#loading-container {
+    display: none;  /* Initially hidden */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 400px;  /* Bigger box */
+}
+
+#loading-message {
+    font-size: 20px;
+    color: #7d2ae8;
+    margin-bottom: 10px;
+}
+
+#progress-container {
+    width: 100%;
+    height: 25px;
+    background: #ddd;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+}
+
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background: #7d2ae8;
+    transition: width 0.3s ease-in-out;
+}
+
+#progress-percentage {
+    display: block;
+    margin-top: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #7d2ae8;
+}
+
+
+/* Dark overlay background */
+#overlay {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 999; /* Below the progress bar */
+}
+
+/* Progress Bar Container */
+#loading-container {
+    display: none;  /* Initially hidden */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 400px;  /* Bigger box */
+    z-index: 1000; /* Above the overlay */
+}
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Bayyin logo"></a>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">الصفحة الرئيسية</a>
+            {% if session.get('loggedin') %}
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">تسجيل خروج</a>
+                <form id="logout-form" action="{{ url_for('logout') }}" method="post" style="display: none;"></form>
+            {% else %}
+                <a href="{{ url_for('login') }}">تسجيل الدخول</a>
+            {% endif %}
+        </div>
+        <div class="profile-icon">
+            <a href="{% if session.get('loggedin') %}{{ url_for('profile') }}{% else %}{{ url_for('login') }}{% endif %}">
+                <img src="{{ url_for('static', filename='images/account.png') }}" alt="Profile Icon">
+            </a>
+        </div>
+    </div>
+
+
+
+
+<!-- AI Dataset Modal -->
+    <div class="modal-content">
+        <h2>إنشاء مجموعة بيانات بالذكاء الاصطناعي</h2>
+
+        <!-- Mandatory: Dataset Description -->
+        <label for="dataset-description">الوصف المطلوب:</label>
+        <textarea id="dataset-description" placeholder="اكتب وصفًا دقيقًا لما يجب أن تحتويه البيانات... مثال: قائمة المدن الكبرى مع عدد السكان والكثافة السكانية، أو مجموعة بيانات لأسعار المنتجات في الأسواق المختلفة)" required></textarea>
+            <label for="dataset-goal">الهدف من الإنشاء:</label>
+             <input type="text" id="dataset-goal" placeholder="ما الهدف من إنشاء هذه البيانات؟ مثال: تحليل السوق، التدريب على الذكاء الاصطناعي)">
+
+        <!-- Optional Fields -->
+        <label for="dataset-domain">المجال (اختياري):</label>
+        <input type="text" id="dataset-domain" placeholder="أدخل المجال يدويًا (مثل: الطقس، المالية، الصحة)">
+
+        <div class="row">
+            <div class="input-group">
+                <label for="columns-count">عدد الأعمدة (اختياري):</label>
+                <input type="number" id="columns-count" min="1" max="20" placeholder="افتراضي: 5">
+            </div>
+            <div class="input-group">
+                <label for="rows-count">عدد الصفوف (اختياري):</label>
+                <input type="number" id="rows-count" min="1" max="1000" placeholder="افتراضي: 10">
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+<button class="submit-ai-btn" id="process-btn" onclick="generateDataset()">إنشاء البيانات</button>
+
+
+          <div id="overlay"></div> <!-- This is the new dark background -->
+            <div id="loading-container">
+            <p id="loading-message">جاري إنشاء البيانات، يرجى الانتظار...</p>
+              <div id="progress-container">
+                 <div id="progress-bar"></div>
+                  </div>
+                 <span id="progress-percentage">0%</span>
+        </div>
+
+
+
+    </div>
+
+
+    <script>
+
+
+ document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 JavaScript Loaded!");
+
+    // Add click event listener to the process button
+    const processBtn = document.getElementById("process-btn");
+    if (processBtn) {
+        processBtn.addEventListener("click", function () {
+            console.log("✅ Button Clicked!");
+            startProcessing();
+        });
+    } else {
+        console.error("❌ Button with ID 'process-btn' not found!");
+    }
+});
+
+let progressInterval = null;
+let isProcessing = false;
+
+function startProcessing() {
+    if (isProcessing) return;
+    isProcessing = true;
+
+    console.log("⏳ Processing started...");
+
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('loading-container').style.display = 'block';
+
+    let progressPercentage = document.getElementById('progress-percentage');
+    let progressBar = document.getElementById('progress-bar');
+
+    let progress = 0;
+    let maxProgress = 95; // Avoid reaching 100% before dataset is ready
+
+    if (progressInterval) clearInterval(progressInterval);
+
+    progressInterval = setInterval(() => {
+        if (progress < maxProgress) {
+            progress += Math.floor(Math.random() * 5) + 2;
+            progress = Math.min(progress, maxProgress);
+
+            progressPercentage.textContent = progress + "%";
+            progressBar.style.width = progress + '%';
+        }
+    }, 500);
+}
+
+// ✅ Call this function when generateDataset() finishes
+function completeProgressBar() {
+    clearInterval(progressInterval);
+    document.getElementById('progress-bar').style.width = "100%";
+    document.getElementById('progress-percentage').textContent = "✅ تم الإنشاء بنجاح!";
+    document.getElementById('loading-message').textContent = "تم إنشاء البيانات بنجاح!";
+
+    setTimeout(stopProcessing, 1500); // Hide UI after success
+}
+
+// ✅ Call this if an error occurs
+function stopProcessing() {
+    clearInterval(progressInterval);
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('loading-container').style.display = 'none';
+    isProcessing = false;
+}
+
+
+
+
+
+        function openAIModal() {
+    document.getElementById("ai-modal").style.display = "block";
+    document.querySelector(".modal-overlay").style.display = "block"; // Show overlay
+}
+
+function closeAIModal() {
+    document.getElementById("ai-modal").style.display = "none";
+    document.querySelector(".modal-overlay").style.display = "none"; // Hide overlay
+}
+
+
+
+        function closeModal() {
+            const fileModal = document.getElementById('fileModal');
+            fileModal.style.display = 'none';
+        }
+
+
+
+
+
+        function submitForm() {
+            const uploadForm = document.getElementById('uploadForm');
+            const selectedFile = document.querySelector('input[name="selected_previous_file"]:checked');
+            const fileInput = document.getElementById('file');
+
+            if (fileInput.files.length > 0) {
+                uploadForm.submit();
+            } else if (selectedFile) {
+                const input = document.createElement('input');
+                input.type = "hidden";
+                input.name = "selected_previous_file";
+                input.value = selectedFile.value;
+                uploadForm.appendChild(input);
+                uploadForm.submit();
+            } else {
+                alert("يرجى اختيار ملف جديد أو تحديد ملف من الملفات السابقة.");
+            }
+        }
+
+        document.getElementById('file').addEventListener('change', function () {
+            const fileInput = this;
+            const files = fileInput.files;
+
+            if (files.length > 4) {
+                alert("يمكنك رفع 4 ملفات فقط.");
+                fileInput.value = "";
+                return;
+            }
+        });
+
+
+      // ✅ Handle dataset generation and redirect correctly
+async function generateDataset() {
+    console.log("🚀 Calling generateDataset()...");
+
+    const description = document.getElementById('dataset-description').value.trim();
+    const goal = document.getElementById('dataset-goal').value.trim();
+    const domain = document.getElementById('dataset-domain').value;
+    const columns = document.getElementById('columns-count').value || 5;
+    const rows = document.getElementById('rows-count').value || 10;
+
+    if (!description || !goal) {
+        alert("❌ يرجى إدخال الوصف والهدف لإنشاء البيانات!");
+        return;
+    }
+
+    startProcessing(); // ✅ Start progress bar BEFORE sending request
+
+    const requestData = {
+        description,
+        goal,
+        domain,
+        columns: parseInt(columns),
+        rows: parseInt(rows)
+    };
+
+    try {
+        const response = await fetch('/generate_dataset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            console.log("✅ Dataset created successfully!");
+
+            // ✅ Ensure progress reaches 100% before redirecting
+            completeProgressBar();
+
+            // ✅ Redirect after dataset is ready
+            setTimeout(() => {
+                window.location.href = result.redirect_url;
+            }, 1000);
+        } else {
+alert(`❌ خطأ أثناء إنشاء البيانات: ${result.error}`);
+            stopProcessing(); // Stop progress bar if error occurs
+        }
+    } catch (error) {
+        console.error("❌ Error in generateDataset:", error);
+        alert("❌ تعذر إرسال الطلب!");
+        stopProcessing(); // Stop progress bar if request fails
+    }
+}
+
+
+
+
+    </script>
+<footer>
+    <div class="footer-content">
+        <div>
+            <h3>من نحن</h3>
+            <p>منصة متطورة تعتمد على الذكاء الاصطناعي لتسهيل تنظيم وتحليل النصوص العربية.
+                مما يساعد المستخدمين على الوصول إلى رؤى دقيقة بسرعة وبكفاءة عالية.</p>
+        </div>
+        <div>
+            <h3><a href="{{ url_for('terms') }}">الشروط والأحكام</a></h3>
+            <a href="mailto:bayyinhelp@gmail.com?subject=الدعم%20والمساعدة">الدعم والمساعدة</a> <br>
+            <a href="{{ url_for('faq') }}">الأسئلة الشائعة</a>
+        </div>
+        <div>
+            <h3>تواصل معنا</h3>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+    <p>جميع الحقوق محفوظة لموقع بيِّن © 2024</p>
+</footer>
+</body>
+</html>

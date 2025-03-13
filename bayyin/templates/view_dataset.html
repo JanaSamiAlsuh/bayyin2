@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض البيانات المنظمة - بَيِّن</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: url('{{ url_for('static', filename='images/BG1.jpg') }}') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 20px 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+            margin-right: 16px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            margin: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .table-container {
+            max-height: calc(100vh - 400px);
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+
+        footer {
+            background: radial-gradient(circle, #281F54, #7d2ae8);
+            color: #fff;
+            padding: 20px 0;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .btn-primary {
+            background-color: #7d2ae8;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: #281F54;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+            }
+
+            .main-content {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+
+
+
+
+
+
+
+        .profile-icon img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 29px;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Bayyin logo"></a>
+        </div>
+             <div class="profile-icon">
+            <a href="{{ url_for('profile') }}">
+                <img src="{{ url_for('static', filename='images/account.png') }}" alt="Profile">
+            </a>
+        </div>
+    </div>
+
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dataset Details -->
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+            <h3 class="text-xl font-medium text-gray-900">{{ dataset.name }}</h3>
+            <p class="mt-2 text-gray-600">
+                <i class="far fa-calendar-alt ml-1"></i>
+                تاريخ التحليل: {{ dataset.created_at.strftime('%Y-%m-%d %H:%M') if dataset.created_at else 'غير متوفر' }}
+            </p>
+        </div>
+
+        <!-- Original Text -->
+        <div class="mt-6 bg-white p-6 rounded-lg shadow-sm">
+            <h4 class="text-lg font-medium text-gray-900 mb-3">النص الأصلي:</h4>
+            <div class="bg-gray-50 p-4 rounded-md">
+                <p class="text-gray-700 whitespace-pre-wrap">{{ dataset.original_text }}</p>
+            </div>
+        </div>
+
+        <!-- Structured Data Table -->
+        <div class="mt-6 bg-white p-6 rounded-lg shadow-sm">
+            <h4 class="text-lg font-medium text-gray-900 mb-3">البيانات المنظمة:</h4>
+            <div class="table-container">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            {% for column in dataset.columns %}
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {{ column }}
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for row in dataset.rows %}
+                        <tr class="hover:bg-gray-50">
+                            {% for cell in row %}
+                            <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">
+                                {{ cell }}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Export Options -->
+        <div class="mt-6 flex justify-end gap-4">
+            <a href="{{ url_for('export_dataset', dataset_id=dataset.id, format_type='csv') }}"
+               class="btn-primary">
+                <i class="fas fa-file-csv ml-1"></i>
+                تصدير CSV
+            </a>
+            <a href="{{ url_for('export_dataset', dataset_id=dataset.id, format_type='xlsx') }}"
+               class="btn-primary">
+                <i class="fas fa-file-excel ml-1"></i>
+                تصدير Excel
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <h3>من نحن</h3>
+                <p>منصة متطورة تعتمد على الذكاء الاصطناعي لتسهيل تنظيم وتحليل النصوص العربية.
+                    مما يساعد المستخدمين على الوصول إلى رؤى دقيقة بسرعة وبكفاءة عالية.</p>
+            </div>
+            <div>
+                <h3><a href="{{ url_for('terms') }}">الشروط والأحكام</a></h3>
+                <a href="mailto:bayyinhelp@gmail.com?subject=الدعم%20والمساعدة">الدعم والمساعدة</a> <br>
+                <a href="{{ url_for('faq') }}">الأسئلة الشائعة</a>
+            </div>
+            <div>
+                <h3>تواصل معنا</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <p class="text-center mt-4">جميع الحقوق محفوظة لموقع بيِّن © 2024</p>
+    </footer>
+</body>
+</html>

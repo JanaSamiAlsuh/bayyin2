@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رفع الملفات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+
+.modal-content p {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    direction: rtl; /* Ensure Arabic text is properly aligned */
+}
+
+
+textarea, input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.input-group {
+    width: 48%;
+}
+
+.submit-ai-btn {
+    background-color: #7d2ae8;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.submit-ai-btn:hover {
+    background-color: #9B7EBD;
+    transform: scale(1.05);
+}
+
+.submit-ai-btn:active {
+    transform: scale(0.95);
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #666;
+}
+
+.close:hover {
+    color: #444;
+}
+
+        #ai-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+        .open-ai-modal {
+    background-color: #7d2ae8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.open-ai-modal:hover {
+    background-color: #9B7EBD;
+    transform: scale(1.05);
+}
+
+.open-ai-modal:active {
+    transform: scale(0.95);
+}
+
+        html, body {
+            height: 100%; /* Full height of the viewport */
+            margin: 0; /* Remove default margins */
+            display: flex;
+            flex-direction: column;
+        }
+        .yellow-button {
+    background-color: #007bff; /* Default blue color */
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease; /* Smooth transition */
+    margin-top: 20px;
+}
+
+.yellow-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.yellow-button:active {
+    transform: scale(0.98); /* Slightly smaller when clicked */
+}
+
+
+        input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #7d2ae8;
+    cursor: pointer;
+}
+
+label:hover {
+    text-decoration: underline;
+    color: #7d2ae8;
+}
+
+
+        ::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #7d2ae8;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+
+
+        #previous-files {
+    margin-top: 20px;
+    display: none; /* Initially hidden */
+    border: 2px solid #7d2ae8; /* Purple border */
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #f9f7fc; /* Light purple background */
+    color: #333; /* Text color */
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+    text-align: right;
+
+}
+
+
+
+
+#previous-files.show {
+    display: block;
+    opacity: 1; /* Fully visible */
+    transform: translateY(0);
+}
+
+        #file-options div {
+    display: flex;
+    align-items: center;
+    padding: 10px 0; /* Add spacing between options */
+    border-bottom: 1px solid #eaeaea; /* Light gray separator */
+}
+
+#file-options div:last-child {
+    border-bottom: none; /* Remove the separator for the last item */
+}
+
+input[type="radio"] {
+    margin-left: 10px; /* Space between the radio button and label */
+    accent-color: #7d2ae8; /* Purple color for the radio button */
+    cursor: pointer; /* Indicate that the radio button is clickable */
+}
+
+label {
+    font-size: 14px;
+    color: #333;
+    cursor: pointer; /* Indicate that the label is clickable */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap; /* Truncate long file names */
+    width: 100%; /* Ensure label text does not overflow */
+}
+
+#file-options {
+    max-height: 200px; /* Limit height for better usability */
+    overflow-y: auto; /* Scrollable for long lists */
+    padding-right: 10px; /* Space for scrollbar */
+    scrollbar-width: thin; /* For Firefox */
+}
+
+#file-options::-webkit-scrollbar {
+    width: 8px;
+}
+
+#file-options::-webkit-scrollbar-thumb {
+    background: #7d2ae8;
+    border-radius: 5px;
+}
+
+#file-options::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+hr {
+    border: none;
+    border-top: 2px solid #7d2ae8; /* Blue separator */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+textarea {
+    width: 100%;
+    height: 150px;
+    resize: none;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+textarea::-webkit-scrollbar {
+    width: 8px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background: #7d2ae8;
+    border-radius: 5px;
+}
+
+textarea::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+@media (max-width: 768px) {
+    .modal {
+        width: 90%;  /* Adjusts to smaller screens */
+        max-width: 90%;
+    }
+}
+
+
+        .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    max-width: 1000px;  /* Ensures modal doesn't stretch too wide */
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto; /* Allow scrolling for long content */
+    max-height: 80vh;  /* Prevent modal from getting too large */
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+/* Ensure background overlay covers full screen */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Dark overlay for better visibility */
+    z-index: 999;
+    display: none;
+}
+
+
+
+
+.modal-content textarea {
+    width: 100%;
+    height: 300px;
+    resize: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    background: #f9f9f9;
+}
+
+.modal-content .continue-btn {
+    background-color: #7d2ae8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.modal-content .continue-btn:hover {
+    background-color: #9B7EBD;
+}
+.file-container {
+    margin-bottom: 20px; /* Space between file content */
+    position: relative; /* Ensure each container has its own scroll context */
+}
+
+
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 20px 30px; /* Reduce padding if necessary */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: fixed; /* Ensures the header stays at the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Ensures the header is above other content */
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+            margin-right: 94px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .nav-links a:hover {
+            color: #007bff;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            display: block;
+            background: #007bff;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-left: 20px;
+        }
+
+        .profile-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        /* General Styling */body {
+    font-family: 'Tajawal', sans-serif;
+    background: linear-gradient(135deg, #e9efff, #f9fcff);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh; /* Ensure body takes full height of the viewport */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+
+        .container {
+    background-color: white;
+    padding: 30px; /* Add padding inside the container to make the content feel more spacious */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 410px; /* Adjust the maximum width to make the container wider */
+    width: 70%; /* Allow the container to adjust responsively to smaller screens */
+    margin-left: 100px;
+            margin-bottom: 150px;
+            margin-top: 130px;
+            margin-right: 100px;
+    text-align: center;
+}
+
+
+
+
+        h1 {
+            color: #7d2ae8;
+        }
+
+        /* File Upload Styling */
+        .file-upload {
+            position: relative;
+            border: 2px dashed #7d2ae8;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: #9B7EBD;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .upload-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            color: #7d2ae8;
+            font-size: 24px;
+        }
+
+        .submit-button {
+            background-color: #7d2ae8;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-button:hover {
+    background-color: #9B7EBD;
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+        .submit-button:active {
+    transform: scale(0.98);
+}
+
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+            text-align: center;
+        }
+
+        footer {
+            background: radial-gradient(circle, #281F54, #7d2ae8);
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            width: 100%;
+            margin-top: auto; /* Ensure footer is always at the bottom */
+        }
+
+        footer .footer-content {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer .footer-content div {
+            margin-bottom: 10px;
+        }
+
+        footer h3 {
+            margin-bottom: 10px;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        footer .social-icons a {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #fff;
+        }
+
+        footer .social-icons a:hover {
+            color: #ccc;
+        }
+
+        footer .footer-content div p {
+            max-width: 300px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        footer p {
+            font-size: 14px;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin: 20px auto;
+        padding: 20px;
+    }
+}
+
+
+        .popup-menu {
+    position: absolute;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    width: 200px;
+    top: 200px; /* Adjust position if needed */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    display: none;
+    text-align: right;
+}
+
+.popup-menu button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: none;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+}
+
+.popup-menu button:hover {
+    background-color: #f0f0f0;
+}
+        #loading-progress {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #progress-bar-container {
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            width: 100%;
+            height: 20px;
+            margin-top: 10px;
+        }
+
+        #progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #4b0082;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Bayyin logo"></a>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">الصفحة الرئيسية</a>
+            {% if session.get('loggedin') %}
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">تسجيل خروج</a>
+                <form id="logout-form" action="{{ url_for('logout') }}" method="post" style="display: none;"></form>
+            {% else %}
+                <a href="{{ url_for('login') }}">تسجيل الدخول</a>
+            {% endif %}
+        </div>
+        <div class="profile-icon">
+            <a href="{% if session.get('loggedin') %}{{ url_for('profile') }}{% else %}{{ url_for('login') }}{% endif %}">
+                <img src="{{ url_for('static', filename='images/account.png') }}" alt="Profile Icon">
+            </a>
+        </div>
+    </div>
+
+
+
+
+    <div class="container">
+        <h1>رفع الملفات</h1>
+        <p style="color: #7d2ae8; font-size: 14px;">يمكن تحميل ملفات النصوص (.txt) أو مستندات الوورد (.docx) فقط</p>
+        <form id="uploadForm" action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
+            <div class="file-upload" id="file-upload" onclick="document.getElementById('file').click()">
+                <div class="upload-button">
+                    <span>اختر الملفات (.txt, .docx) لرفعها</span>
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                </div>
+                <input type="file" name="files" id="file" accept=".txt, .docx" multiple onchange="showFileNames()">
+                <div class="file-name" id="file-name"></div>
+                <div id="success-message" style="color: green; font-size: 14px; margin-top: 10px;"></div>
+            </div>
+            {% if session['process_type'] != 'processing_options' %}
+                <div style="margin-top: 20px; text-align: center;">
+                <span>أو</span>
+                <button type="button" onclick="showPreviousFiles()" class="yellow-button">
+                    عرض الملفات السابقة <i class="fas fa-folder-open"></i>
+                </button>
+            </div>
+                <div id="previous-files">
+                <p id="file-list-message" style="font-size: 14px; color: #333;">الرجاء اختيار ملف من القائمة:</p>
+                <div id="file-options"></div>
+            </div>
+            {% endif %}
+
+            <button type="button" class="submit-button" onclick="submitForm()">رفع ومعالجة الملفات</button>
+        </form>
+        <div id="loading-progress">
+            <p>جاري المعالجة: <span id="progress-percentage">0</span>%</p>
+            <div id="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+{#    <button class="open-ai-modal" onclick="openAIModal()">إنشاء مجموعة بيانات بالذكاء الاصطناعي</button>#}
+</div>
+    </div>
+<!-- AI Dataset Modal -->
+{#<div id="ai-modal" class="modal">#}
+{#    <div class="modal-content">#}
+{#        <span class="close" onclick="closeAIModal()">&times;</span>#}
+{#        <h2>إنشاء مجموعة بيانات بالذكاء الاصطناعي</h2>#}
+{##}
+{#        <!-- Mandatory: Dataset Description -->#}
+{#        <label for="dataset-description">الوصف المطلوب:</label>#}
+{#        <textarea id="dataset-description" placeholder="اكتب وصفًا لما يجب أن تحتويه البيانات..." required></textarea>#}
+{#<label for="dataset-goal">الهدف من الإنشاء:</label>#}
+{#<input type="text" id="dataset-goal" placeholder="ما الهدف من إنشاء هذه البيانات؟">#}
+{##}
+{#        <!-- Optional Fields -->#}
+{#        <label for="dataset-domain">المجال (اختياري):</label>#}
+{#        <input type="text" id="dataset-domain" placeholder="أدخل المجال يدويًا (مثل: الطقس، المالية، الصحة)">#}
+{##}
+{#        <div class="row">#}
+{#            <div class="input-group">#}
+{#                <label for="columns-count">عدد الأعمدة (اختياري):</label>#}
+{#                <input type="number" id="columns-count" min="1" max="20" placeholder="افتراضي: 5">#}
+{#            </div>#}
+{#            <div class="input-group">#}
+{#                <label for="rows-count">عدد الصفوف (اختياري):</label>#}
+{#                <input type="number" id="rows-count" min="1" max="1000" placeholder="افتراضي: 10">#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#        <!-- Submit Button -->#}
+{#        <button class="submit-ai-btn" onclick="generateDataset()">إنشاء البيانات</button>#}
+{#    </div>#}
+{#</div>#}
+
+
+
+    <div id="fileModal" class="modal">
+        <div class="modal-content">
+            <h2>محتوى الملفات</h2>
+            <div id="fileContents" style="max-height: 400px; overflow-y: auto;"></div>
+            <button class="continue-btn" onclick="closeModal()">متابعة</button>
+        </div>
+    </div>
+
+
+    <script>
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const aiButton = document.querySelector('.open-ai-modal');
+        const processType = "{{ session.get('process_type') }}";  // Get the chosen process from session
+
+        if (processType === 'processing_options') {  // If "معالجة النص" is chosen
+            aiButton.style.display = 'none';  // Hide the AI dataset button
+        }
+    });
+
+
+
+
+        async function generateDataset() {
+    const description = document.getElementById('dataset-description').value.trim();
+    const domain = document.getElementById('dataset-domain').value;
+    const columns = document.getElementById('columns-count').value || 5;
+    const rows = document.getElementById('rows-count').value || 10;
+    const goal = document.getElementById('dataset-goal').value.trim(); // ✅ New field
+
+    if (!description) {
+        alert("يرجى إدخال وصف للبيانات المطلوبة!");
+        return;
+    }
+
+    const requestData = {
+        description,
+        domain,
+        columns: parseInt(columns),
+        rows: parseInt(rows),
+        goal  // ✅ Send "goal" to the backend
+    };
+
+    try {
+        const response = await fetch('/generate_dataset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestData)
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert("تم إنشاء مجموعة البيانات بنجاح!");
+            window.location.href = result.redirect_url;
+        } else {
+            alert("❌ حدث خطأ أثناء إنشاء مجموعة البيانات!");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("تعذر إرسال الطلب!");
+    }
+}
+
+
+
+
+
+
+        function openAIModal() {
+    document.getElementById("ai-modal").style.display = "block";
+    document.querySelector(".modal-overlay").style.display = "block"; // Show overlay
+}
+
+function closeAIModal() {
+    document.getElementById("ai-modal").style.display = "none";
+    document.querySelector(".modal-overlay").style.display = "none"; // Hide overlay
+}
+
+
+        function showFileNames() {
+            const fileInput = document.getElementById('file');
+            const fileNameDiv = document.getElementById('file-name');
+            const successMessageDiv = document.getElementById('success-message');
+            const fileContentsDiv = document.getElementById('fileContents');
+            const fileModal = document.getElementById('fileModal');
+            const files = fileInput.files;
+
+            if (files.length > 4) {
+                alert("يمكنك رفع 4 ملفات فقط.");
+                fileInput.value = "";
+                fileNameDiv.textContent = "";
+                successMessageDiv.textContent = "";
+                fileContentsDiv.innerHTML = "";
+                fileModal.style.display = 'none';
+                return;
+            }
+
+            if (files.length > 0) {
+                let fileNames = Array.from(files).map(file => file.name).join(', ');
+                fileNameDiv.textContent = fileNames;
+                successMessageDiv.textContent = `تم اختيار الملفات: ${fileNames}`;
+                fileContentsDiv.innerHTML = '';
+
+                Array.from(files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const contentContainer = document.createElement('div');
+                        const fileTitle = document.createElement('h3');
+                        fileTitle.textContent = `محتوى الملف ${index + 1}: ${file.name}`;
+                        fileTitle.style.color = '#7d2ae8';
+
+                        const fileContent = document.createElement('textarea');
+                        fileContent.value = e.target.result;
+                        fileContent.readOnly = true;
+
+                        contentContainer.appendChild(fileTitle);
+                        contentContainer.appendChild(fileContent);
+                        fileContentsDiv.appendChild(contentContainer);
+                    };
+                    reader.readAsText(file);
+                });
+
+                fileModal.style.display = 'block';
+            } else {
+                fileNameDiv.textContent = "";
+                successMessageDiv.textContent = "";
+            }
+        }
+
+        function closeModal() {
+            const fileModal = document.getElementById('fileModal');
+            fileModal.style.display = 'none';
+        }
+
+
+
+
+  async function showPreviousFiles() {
+    const previousFilesContainer = document.getElementById('previous-files');
+    const fileOptions = document.getElementById('file-options');
+    fileOptions.innerHTML = ''; // Clear old content
+
+    try {
+        const response = await fetch('/get_previous_files');
+        const data = await response.json();
+
+        if (data.files && data.files.length > 0) {
+            data.files.forEach((file, index) => {
+                const option = document.createElement('div');
+                option.innerHTML = `
+                    <input type="radio" id="file-${index}" name="selected_previous_file" value="${file.filename}">
+                    <label for="file-${index}">${file.display_name}</label>
+                `;
+                fileOptions.appendChild(option);
+            });
+            previousFilesContainer.style.display = 'block';
+        } else {
+            fileOptions.innerHTML = '<p>لا توجد ملفات سابقة.</p>';
+            previousFilesContainer.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error fetching previous files:', error);
+        fileOptions.innerHTML = '<p>حدث خطأ أثناء تحميل الملفات السابقة.</p>';
+        previousFilesContainer.style.display = 'block';
+    }
+}
+
+        function submitForm() {
+            const uploadForm = document.getElementById('uploadForm');
+            const selectedFile = document.querySelector('input[name="selected_previous_file"]:checked');
+            const fileInput = document.getElementById('file');
+
+            document.getElementById('loading-progress').style.display = 'block';
+            let progressPercentage = document.getElementById('progress-percentage');
+            let progressBar = document.getElementById('progress-bar');
+
+            let progress = 0;
+            let maxProgress = 99;
+            let interval = setInterval(() => {
+                if (progress < maxProgress) {
+                    progress += 1;
+                    progress = progress > maxProgress ? maxProgress : progress;
+
+                    progressPercentage.textContent = progress + "";
+                    progressBar.style.width = progress + '%';
+                } else {
+                    clearInterval(interval);
+                }
+            }, 3000);
+
+            if (fileInput.files.length > 0)
+            {
+                uploadForm.submit();
+            } else if (selectedFile) {
+                const input = document.createElement('input');
+                input.type = "hidden";
+                input.name = "selected_previous_file";
+                input.value = selectedFile.value;
+                uploadForm.appendChild(input);
+                uploadForm.submit();
+            } else {
+                alert("يرجى اختيار ملف جديد أو تحديد ملف من الملفات السابقة.");
+            }
+        }
+
+        document.getElementById('file').addEventListener('change', function () {
+            const fileInput = this;
+            const files = fileInput.files;
+
+            if (files.length > 4) {
+                alert("يمكنك رفع 4 ملفات فقط.");
+                fileInput.value = "";
+                return;
+            }
+        });
+    </script>
+<footer>
+    <div class="footer-content">
+        <div>
+            <h3>من نحن</h3>
+            <p>منصة متطورة تعتمد على الذكاء الاصطناعي لتسهيل تنظيم وتحليل النصوص العربية.
+                مما يساعد المستخدمين على الوصول إلى رؤى دقيقة بسرعة وبكفاءة عالية.</p>
+        </div>
+        <div>
+            <h3><a href="{{ url_for('terms') }}">الشروط والأحكام</a></h3>
+            <a href="mailto:bayyinhelp@gmail.com?subject=الدعم%20والمساعدة">الدعم والمساعدة</a> <br>
+            <a href="{{ url_for('faq') }}">الأسئلة الشائعة</a>
+        </div>
+        <div>
+            <h3>تواصل معنا</h3>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+    <p>جميع الحقوق محفوظة لموقع بيِّن © 2024</p>
+</footer>
+</body>
+</html>

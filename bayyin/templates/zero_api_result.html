@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتائج تحليل البيانات - بيِّن</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+      /* ✅ Container for Metadata */
+.metadata-container {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-start;
+    margin-top: 15px;
+
+}
+
+/* ✅ Individual Metadata Box */
+.metadata-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    min-width: 140px; /* Ensures proper width */
+}
+
+/* ✅ Number Styling (Left Side) */
+.metadata-value {
+    font-weight: bold;
+    margin-right: auto;
+                color: #281F54;
+/* Push number to the left */
+}
+
+/* ✅ Label Styling (Middle) */
+.metadata-label {
+    text-align: center;
+    flex-grow: 1;
+                color: #281F54;
+
+}
+
+/* ✅ Icon Styling (Right Side) */
+.metadata-box i {
+    margin-left: 8px; /* Push icon to the right */
+        color: #281F54;
+; /* White Icon */
+}
+
+
+        html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+            background: url('{{ url_for('static', filename='images/BG1.jpg') }}') no-repeat center center fixed;
+            background-size: cover;
+            color: #000;
+
+    flex-direction: column;
+}
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 4px;
+    color: white;
+    background-color: #007BFF;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.pagination a.active {
+    background-color: #0056b3;
+    font-weight: bold;
+}
+
+.pagination a:hover {
+    background-color: #0056b3;
+}
+
+.pagination .prev, .pagination .next {
+    font-weight: bold;
+}
+
+        .export-buttons {
+                text-align: center;
+            }
+
+            .export-btn {
+                display: block;
+                margin: 10px 0;
+            }
+
+        .export-buttons {
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .export-btn {
+            display: inline-block;
+            padding: 15px 35px;
+            margin: 0 10px;
+            background-color: #7d2ae8;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+
+        .export-btn:hover {
+            background-color: #281F54;
+            transform: translateY(-2px);
+        }
+
+        .export-btn i {
+            margin-left: 8px;
+        }
+
+.metadata-box {
+   background-color: #f0f0f0;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+
+.summary-section {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-right: 4px solid #7d2ae8;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-title {
+            color: #281F54;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .summary-content {
+            line-height: 1.8;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+
+/* Dataset Toggle Buttons */
+.toggle-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.toggle-buttons .export-btn {
+    font-size: 16px;
+    padding: 14px 35px;
+    border-radius: 8px;
+}
+
+.toggle-buttons .export-btn i {
+    margin-left: 8px;
+}
+
+        /* Metadata Box Style */
+.metadata {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+
+}
+
+.metadata-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: gray;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    color: black;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.metadata-box i {
+   font-weight: bold;
+            color: #281F54;
+            margin-left: 8px;
+}
+
+.metadata-value {
+    font-weight: bold;
+            color: #281F54;
+            margin-left: 8px;
+    background-color: gray;
+}
+
+        .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.toggle-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.purple {
+    background-color: #6a0dad;
+    color: white;
+}
+
+.summary-box {
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.dataset-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #6a0dad;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th {
+    background: #6a0dad;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+}
+
+.dataset-section {
+    margin-top: 20px;
+}
+.button-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        justify-content: center;
+    }
+    .btn {
+        background-color: #6200EA;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background 0.3s;
+    }
+    .btn.active {
+        background-color: #3700B3;
+    }
+    .summary-box {
+        background: #f5f5f5;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: right;
+    }
+    .summary-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #EDE7F6;
+        padding: 8px;
+        border-radius: 6px;
+    }
+    .content-type {
+        font-size: 14px;
+        font-weight: bold;
+        color: #6200EA;
+    }
+    .data-header {
+        display: flex;
+        justify-content: space-between;
+        background: #EDE7F6;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+    }
+    .stats {
+        font-weight: bold;
+        color: #3700B3;
+    }
+    .results-container {
+        margin-top: 20px;
+        padding: 15px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .hidden {
+        display: none;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    th {
+        background-color: #6200EA;
+        color: white;
+    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 20px 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+            margin-right: 16px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .nav-links a:hover {
+            color: #007bff;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            display: block;
+            background: #007bff;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 50px;
+        }
+
+        .profile-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+        footer {
+    background: radial-gradient(circle, #281F54, #7d2ae8);
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+footer .footer-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+footer .footer-content div {
+    margin-bottom: 10px;
+}
+
+footer h3 {
+    margin-bottom: 10px;
+    font-size: 18px; /* Adjust heading font size */
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px; /* Adjust link font size */
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer .social-icons a {
+    font-size: 24px; /* Adjust social icon size */
+    margin-right: 10px;
+    color: #fff;
+}
+
+footer .social-icons a:hover {
+    color: #ccc;
+}
+
+footer .footer-content div p {
+    max-width: 300px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-size: 14px; /* Match paragraph font size */
+}
+
+footer p {
+    font-size: 14px; /* Match copyright text size */
+    margin-top: 10px;
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.95);
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+
+        h1 {
+            color: #281F54;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .results-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .results-container h2 {
+            color: #281F54;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: right;
+        }
+
+        th {
+            background-color: #7d2ae8;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        .summary-section {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-right: 4px solid #7d2ae8;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-title {
+            color: #281F54;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Bayyin logo"></a>
+    </div>
+    <div class="nav-links">
+        <a href="{{ url_for('home') }}">الصفحة الرئيسية</a>
+        {% if session.get('loggedin') %}
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">تسجيل خروج</a>
+            <form id="logout-form" action="{{ url_for('logout') }}" method="post" style="display: none;"></form>
+        {% else %}
+            <a href="{{ url_for('login') }}">تسجيل الدخول</a>
+        {% endif %}
+    </div>
+    <div class="profile-icon">
+        <a href="{% if session.get('loggedin') %}{{ url_for('profile') }}{% else %}{{ url_for('login') }}{% endif %}">
+            <img src="{{ url_for('static', filename='images/account.png') }}" alt="Profile Icon">
+        </a>
+    </div>
+  </div>
+   <!-- Main Content -->
+    <div class="main-content">
+        <h1>نتائج تحليل النص</h1>
+
+
+<!-- Toggle Buttons for GPT-4o & Claude -->
+<div class="toggle-buttons">
+    <button onclick="showDataset('gpt4o')" class="export-btn"><i class="fas fa-robot"></i> نتائج GPT-4o</button>
+    <button onclick="showDataset('claude')" class="export-btn"><i class="fas fa-brain"></i> نتائج Claude 3</button>
+<!-- Gemini Button with Icon -->
+<button onclick="showDataset('gemini')" class="export-btn">
+    <i class="fas fa-star"></i> نتائج Gemini
+</button>
+
+</div>
+
+<!-- ✅ Styled Summary Section (Matching Your Screenshot) -->
+<div class="summary-section">
+    <h2 class="summary-title"><i class="fas fa-chart-bar"></i> ملخص التحليل</h2>
+    <div class="summary-content">
+        {% if gpt4o_dataset and gpt4o_dataset.get('summary') %}
+            {{ gpt4o_dataset['summary'] }}
+        {% elif claude_dataset and claude_dataset.get('summary') %}
+            {{ claude_dataset['summary'] }}
+        {% elif gemini_dataset and gemini_dataset.get('summary') %}
+            {{ gemini_dataset['summary'] }}
+        {% else %}
+            ❌ لم يتم العثور على ملخص.
+        {% endif %}
+    </div>
+</div>
+
+
+<!-- ✅ GPT-4o Section -->
+<div id="gpt4o-section" class="results-container" style="display: block;">
+    <h2>جدول البيانات المستخرجة - GPT-4o</h2>
+
+    {% if gpt4o_dataset %}
+    <div class="metadata-container">
+        <!-- ✅ Columns Count for GPT-4o -->
+        <div class="metadata-box" style="background-color: #f0f0f0;">
+            <i class="fas fa-table"></i> <!-- ✅ Columns Icon -->
+            <span class="metadata-label">عدد الأعمدة:</span>
+            <span class="metadata-value" style="background-color: #f0f0f0;">{{ gpt4o_dataset['columns']|length }}</span>
+        </div>
+
+        <!-- ✅ Rows Count for GPT-4o -->
+        <div class="metadata-box" style="background-color: #f0f0f0;">
+            <i class="fas fa-database"></i> <!-- ✅ Rows Icon -->
+            <span class="metadata-label">عدد السجلات:</span>
+            <span class="metadata-value" style="background-color: #f0f0f0;">{{ gpt4o_dataset['rows']|length }}</span>
+        </div>
+    </div>
+{% else %}
+    <p class="no-data-warning">⚠ لم يتم العثور على بيانات GPT-4o.</p>
+{% endif %}
+
+    <!-- ✅ Export Buttons (Only for GPT-4o) -->
+    {% if gpt4o_dataset %}
+        <div class="export-buttons">
+            <a href="{{ url_for('export_dataset', dataset_id=gpt4o_dataset['id'], format_type='csv') }}" class="export-btn">
+                <i class="fas fa-file-csv"></i> تصدير CSV - GPT-4o
+            </a>
+            <a href="{{ url_for('export_dataset', dataset_id=gpt4o_dataset['id'], format_type='xlsx') }}" class="export-btn">
+                <i class="fas fa-file-excel"></i> تصدير Excel - GPT-4o
+            </a>
+        </div>
+    {% endif %}
+
+    <table>
+    <thead>
+        <tr>
+            <th>الرقم</th> <!-- ✅ Added Row Number Column -->
+            {% for column in gpt4o_dataset['columns'] %}
+                <th>{{ column }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in gpt4o_dataset['rows'] %}
+            <tr>
+                <td>{{ loop.index }}</td> <!-- ✅ Auto Row Numbering -->
+                {% for cell in row %}
+                    <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</div>
+
+        <!-- ✅ Claude 3 Section -->
+<div id="claude-section" class="results-container" style="display: none;">
+    <h2>جدول البيانات المستخرجة - Claude 3</h2>
+
+    {% if claude_dataset %}
+    <div class="metadata-container">
+        <!-- ✅ Columns Count for Claude 3 -->
+        <div class="metadata-box" style="background-color: #f0f0f0;">
+            <i class="fas fa-table"></i> <!-- ✅ Columns Icon -->
+            <span class="metadata-label">عدد الأعمدة:</span>
+            <span class="metadata-value" style="background-color: #f0f0f0;">{{ claude_dataset['columns']|length }}</span>
+        </div>
+
+        <!-- ✅ Rows Count for Claude 3 -->
+        <div class="metadata-box" style="background-color: #f0f0f0;">
+            <i class="fas fa-database"></i> <!-- ✅ Rows Icon -->
+            <span class="metadata-label">عدد السجلات:</span>
+            <span class="metadata-value" style="background-color: #f0f0f0;">{{ claude_dataset['rows']|length }}</span>
+        </div>
+    </div>
+{% else %}
+    <p class="no-data-warning">⚠ لم يتم العثور على بيانات Claude 3.</p>
+{% endif %}
+
+
+    <!-- ✅ Export Buttons (Only for Claude 3) -->
+    {% if claude_dataset %}
+        <div class="export-buttons">
+            <a href="{{ url_for('export_dataset', dataset_id=claude_dataset['id'], format_type='csv') }}" class="export-btn">
+                <i class="fas fa-file-csv"></i> تصدير CSV - Claude 3
+            </a>
+            <a href="{{ url_for('export_dataset', dataset_id=claude_dataset['id'], format_type='xlsx') }}" class="export-btn">
+                <i class="fas fa-file-excel"></i> تصدير Excel - Claude 3
+            </a>
+        </div>
+    {% endif %}
+
+    <table>
+    <thead>
+        <tr>
+            <th>الرقم</th> <!-- ✅ Added Row Number Column -->
+            {% for column in claude_dataset['columns'] %}
+                <th>{{ column }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in claude_dataset['rows'] %}
+            <tr>
+                <td>{{ loop.index }}</td> <!-- ✅ Auto Row Numbering -->
+                {% for cell in row %}
+                    <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</div>
+<!-- ✅ Gemini Dataset Section -->
+<div id="gemini-section" class="results-container" style="display: none;">
+    <h2>جدول البيانات المستخرجة - Gemini</h2>
+
+<!-- ✅ Gemini Dataset Metadata (Columns & Rows Count) -->
+{% if gemini_dataset %}
+    <div class="metadata-container">
+        <!-- ✅ Columns Count -->
+        <div class="metadata-box" style="background-color: #f0f0f0;">
+                        <i class="fas fa-table"></i> <!-- ✅ Fixed Columns Icon -->
+
+            <span class="metadata-label">عدد الأعمدة:</span>
+                        <span class="metadata-value" style="background-color: #f0f0f0;">{{ gemini_dataset['columns']|length }}</span>
+
+        </div>
+
+        <!-- ✅ Rows Count -->
+        <div class="metadata-box" style="background-color: #f0f0f0;">
+                        <i class="fas fa-database"></i>
+            <span class="metadata-label">عدد السجلات:</span>
+                        <span class="metadata-value" style="background-color: #f0f0f0;">{{ gemini_dataset['rows']|length }}</span>
+
+        </div>
+    </div>
+{% else %}
+    <p class="no-data-warning">⚠ لم يتم العثور على بيانات Gemini.</p>
+{% endif %}
+
+
+
+
+
+
+    {% if gemini_dataset %}
+        <div class="export-buttons">
+            <a href="{{ url_for('export_dataset', dataset_id=gemini_dataset['id'], format_type='csv') }}" class="export-btn">
+                <i class="fas fa-file-csv"></i> تصدير CSV - Gemini
+            </a>
+            <a href="{{ url_for('export_dataset', dataset_id=gemini_dataset['id'], format_type='xlsx') }}" class="export-btn">
+                <i class="fas fa-file-excel"></i> تصدير Excel - Gemini
+            </a>
+        </div>
+    {% endif %}
+
+    <table>
+    <thead>
+        <tr>
+            <th>الرقم</th> <!-- ✅ Added Row Number Column -->
+            {% for column in gemini_dataset['columns'] %}
+                <th>{{ column }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in gemini_dataset['rows'] %}
+            <tr>
+                <td>{{ loop.index }}</td> <!-- ✅ Auto Row Numbering -->
+                {% for cell in row %}
+                    <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</div>
+    </div>
+
+
+
+
+<!-- ✅ Pagination Bar -->
+{% if total_pages > 1 %}
+<div class="pagination">
+    {% if page > 1 %}
+        <a href="{{ url_for('show_dataset_results', gpt4o_id=gpt4o_dataset.get('id', ''), claude_id=claude_dataset.get('id', ''), page=page-1) }}" class="prev">
+            &laquo; السابق
+        </a>
+    {% endif %}
+
+    {% for p in range(1, total_pages + 1) %}
+        <a href="{{ url_for('show_dataset_results', gpt4o_id=gpt4o_dataset.get('id', ''), claude_id=claude_dataset.get('id', ''), page=p) }}"
+           class="{% if p == page %} active {% endif %}">
+            {{ p }}
+        </a>
+    {% endfor %}
+
+    {% if page < total_pages %}
+        <a href="{{ url_for('show_dataset_results', gpt4o_id=gpt4o_dataset.get('id', ''), claude_id=claude_dataset.get('id', ''), page=page+1) }}" class="next">
+            التالي &raquo;
+        </a>
+    {% endif %}
+</div>
+{% endif %}
+<!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h3>من نحن</h3>
+        <p>منصة متطورة تعتمد على الذكاء الاصطناعي لتسهيل تنظيم وتحليل النصوص العربية.
+          مما يساعد المستخدمين على الوصول إلى رؤى دقيقة بسرعة وبكفاءة عالية.</p>
+      </div>
+      <div>
+        <h3><a href="{{ url_for('terms') }}">الشروط والأحكام</a></h3>
+        <a href="mailto:bayyinhelp@gmail.com?subject=الدعم%20والمساعدة">الدعم والمساعدة</a> <br>
+        <a href="{{ url_for('faq') }}">الأسئلة الشائعة</a>
+
+      </div>
+      <div>
+        <h3>تواصل معنا</h3>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+    <p>جميع الحقوق محفوظة لموقع بيِّن © 2024</p>
+  </footer>
+
+
+<!-- JavaScript for Switching Views -->
+<script>
+    function showDataset(model) {
+        if (model === 'gpt4o') {
+            document.getElementById("gpt4o-section").style.display = "block";
+            document.getElementById("claude-section").style.display = "none";
+            document.getElementById("gemini-section").style.display = "none";
+        } else if (model === 'claude') {
+            document.getElementById("gpt4o-section").style.display = "none";
+            document.getElementById("claude-section").style.display = "block";
+            document.getElementById("gemini-section").style.display = "none";
+        } else if (model === 'gemini') {
+            document.getElementById("gpt4o-section").style.display = "none";
+            document.getElementById("claude-section").style.display = "none";
+            document.getElementById("gemini-section").style.display = "block"; // ✅ Ensure Gemini is displayed
+        }
+    }
+
+    document.getElementById("toggle_gpt4o").addEventListener("click", function() {
+        document.getElementById("gpt4o_summary").classList.remove("hidden");
+        document.getElementById("gpt4o_table").classList.remove("hidden");
+        document.getElementById("claude_summary").classList.add("hidden");
+        document.getElementById("claude_table").classList.add("hidden");
+        this.classList.add("active");
+        document.getElementById("toggle_claude").classList.remove("active");
+    });
+
+    document.getElementById("toggle_claude").addEventListener("click", function() {
+        document.getElementById("claude_summary").classList.remove("hidden");
+        document.getElementById("claude_table").classList.remove("hidden");
+        document.getElementById("gpt4o_summary").classList.add("hidden");
+        document.getElementById("gpt4o_table").classList.add("hidden");
+        this.classList.add("active");
+        document.getElementById("toggle_gpt4o").classList.remove("active");
+    });
+
+</script>
+
+</body>
+</html>

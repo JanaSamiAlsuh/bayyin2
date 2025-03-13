@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with GPT</title>
+    <script>
+        async function sendPrompt() {
+            const prompt = document.getElementById("prompt").value; // Get user input
+            const response = await fetch("/api/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ prompt: prompt }) // Send input to the backend
+            });
+            const data = await response.json(); // Get the response from the backend
+            document.getElementById("response").innerText = data.reply || data.error; // Show the response
+        }
+
+
+
+        async function sendPrompt() {
+    const prompt = document.getElementById("prompt").value;
+    console.log("Sending prompt:", prompt); // Debug log
+    try {
+        const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: prompt }),
+        });
+        const data = await response.json();
+        console.log("Received response:", data); // Debug log
+        document.getElementById("response").innerText = data.reply || "Error occurred";
+    } catch (error) {
+        console.error("Error:", error); // Debug log
+    }
+}
+
+    </script>
+</head>
+<body>
+    <h1>Chat with GPT</h1>
+    <textarea id="prompt" placeholder="Type your question here"></textarea><br>
+    <button onclick="sendPrompt()">Send</button>
+    <p id="response"></p>
+</body>
+</html>

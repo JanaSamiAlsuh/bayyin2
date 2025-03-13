@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي - بَيِّن</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: url('{{ url_for('static', filename='images/BG1.jpg') }}') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 20px 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+            margin-right: 16px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 50px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .sub-tab-content
+        {
+           display: none;
+        }
+
+        .sub-tab-content.active {
+            display: block;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+      footer {
+          width: 100%;
+    background: radial-gradient(circle, #281F54, #7d2ae8);
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+footer .footer-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+footer .footer-content div {
+    margin-bottom: 10px;
+}
+
+footer h3 {
+    margin-bottom: 10px;
+    margin-top: 0;
+    font-size: 18px; /* Adjust heading font size */
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px; /* Adjust link font size */
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer .social-icons a {
+    font-size: 24px; /* Adjust social icon size */
+    margin-right: 10px;
+    color: #fff;
+}
+
+footer .social-icons a:hover {
+    color: #ccc;
+}
+
+footer .footer-content div p {
+    max-width: 300px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-size: 14px; /* Match paragraph font size */
+}
+
+footer p {
+    font-size: 14px; /* Match copyright text size */
+    margin-top: 10px;
+    margin-bottom: 0px;
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+        .btn-primary {
+            background-color: #7d2ae8;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #281F54;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .profile-icon {
+                margin-right: 0;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Bayyin logo"></a>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">الصفحة الرئيسية</a>
+            <a href="{{ url_for('upload_file') }}">رفع ملف</a>
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">تسجيل خروج</a>
+            <form id="logout-form" action="{{ url_for('logout') }}" method="post" style="display: none;"></form>
+        </div>
+        <div class="profile-icon">
+            <a href="{{ url_for('profile') }}">
+                <img src="{{ url_for('static', filename='images/account.png') }}" alt="Profile Icon">
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- [Previous main content code remains the same] -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Main Content -->
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <!-- Success/Error Messages -->
+    {% if success_message %}
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <span class="block sm:inline">{{ success_message }}</span>
+    </div>
+    {% endif %}
+
+    {% if error_message %}
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <span class="block sm:inline">{{ error_message }}</span>
+    </div>
+    {% endif %}
+
+    <!-- Tabs -->
+    <div class="mb-4">
+        <div class="border-b border-gray-200">
+            <nav class="flex -mb-px">
+                <button onclick="switchTab('personal')" class="tab-button w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm leading-5 focus:outline-none transition duration-150 ease-in-out border-blue-500 text-blue-600" data-tab="personal">
+                    المعلومات الشخصية
+                </button>
+                <button onclick="switchTab('biography')" class="tab-button w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm leading-5 focus:outline-none transition duration-150 ease-in-out border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="biography">
+                     السيرة الذاتية
+                </button>
+                <button onclick="switchTab('files')" class="tab-button w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm leading-5 focus:outline-none transition duration-150 ease-in-out border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="files">
+                    تحليل النص
+                </button>
+                <button onclick="switchTab('analysis')" class="tab-button w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm leading-5 focus:outline-none transition duration-150 ease-in-out border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="analysis">
+                    تحليل إحصائي
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Personal Information Tab -->
+    <div id="personal" class="tab-content active">
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">المعلومات الأساسية</h3>
+            <form action="{{ url_for('update_user_info') }}" method="post" class="space-y-4">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">اسم المستخدم</label>
+                        <input type="text" name="username" value="{{ user.username }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
+                        <input type="email" name="email" value="{{ user.email }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">الاسم الأول</label>
+                        <input type="text" name="first_name" value="{{ user.first_name }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">اسم العائلة</label>
+                        <input type="text" name="second_name" value="{{ user.second_name }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">التخصص</label>
+                        <input type="text" name="major" value="{{ user.major }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">حفظ التغييرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Personal Information Tab -->
+    <div id="biography" class="tab-content">
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">السيرة الذاتية</h3>
+            <form action="{{ url_for('update_biography') }}" method="post" class="space-y-4">
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">تاريخ الميلاد</label>
+                        <input type="date" name="birthdate" value="{{ user.birthdate }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">البلد</label>
+                        <input type="text" name="country" value="{{ user.country }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">نبذة تعريفية</label>
+                        <textarea name="cv" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">{{ user.cv }}</textarea>
+                    </div>
+                </div>
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">حفظ السيرة الذاتية</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Files Tab -->
+    <div id="files" class="tab-content">
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">الملفات المحللة</h3>
+            </div>
+            <div class="border-t border-gray-200">
+                <ul class="divide-y divide-gray-200">
+                    {% for result in text_results %}
+                            <li class="px-4 py-4 sm:px-6">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-1">
+                                        <h4 class="text-lg font-medium text-gray-900">
+                                            {{ result.original_filename }}
+                                        </h4>
+                                        <p class="mt-1 text-sm text-gray-500">
+                                            تاريخ التحليل: {{ result.formatted_date }}
+                                        </p>
+                                        <p class="mt-1 text-sm text-gray-500">
+                                            نوع التحليل:
+                                            {% if result.processing_type == 'api_analysis' %}
+                                                تحليل النص المنظم
+                                            {% else %}
+                                                تحليل إحصائي للنص
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <div class="flex space-x-2 rtl:space-x-reverse">
+                                        <a href="{{ url_for('view_result', result_id=result.id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">عرض النتائج</a>
+                                        <button onclick="deleteFile({{ result.id }})" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium">حذف</button>
+                                    </div>
+                                </div>
+                            </li>
+                    {% else %}
+                    <li class="px-4 py-4 sm:px-6 text-center text-gray-500">
+                        لا توجد ملفات محللة
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Files Analysis Tab -->
+    <div id="analysis" class="tab-content">
+        <div class="mb-4">
+            <div class="border-b border-gray-200">
+                <nav class="flex -mb-px">
+                    <button onclick="switchSubTab('api_analysis')" class="sub-tab-button w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm leading-5 focus:outline-none transition duration-150 ease-in-out border-blue-500 text-blue-600" data-tab="api_analysis">
+                        تحليل النص المنظم
+                    </button>
+                    <button onclick="switchSubTab('gpt_analysis')" class="sub-tab-button w-1/2 py-4 px-1 text-center border-b-2 font-medium text-sm leading-5 focus:outline-none transition duration-150 ease-in-out border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="gpt_analysis">
+                         تحليل إحصائي للنص
+                    </button>
+                </nav>
+            </div>
+        </div>
+        <div id="api_analysis" class="sub-tab-content active">
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">الملفات المحللة</h3>
+            </div>
+            <div class="border-t border-gray-200">
+                <ul class="divide-y divide-gray-200">
+                    {% for result in api_results %}
+                            <li class="px-4 py-4 sm:px-6">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-1">
+                                        <h4 class="text-lg font-medium text-gray-900">
+                                            {{ result.display_filename }}
+                                        </h4>
+                                        <p class="mt-1 text-sm text-gray-500">
+                                            تاريخ التحليل: {{ result.formatted_date }}
+                                        </p>
+                                        <p class="mt-1 text-sm text-gray-500">
+                                            نوع التحليل:
+                                            تحليل النص المنظم
+                                        </p>
+                                    </div>
+                                    <div class="flex space-x-2 rtl:space-x-reverse">
+                                        <a href="{{ url_for('view_dataset', dataset_id=result.id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">عرض النتائج</a>
+                                        <button onclick="deleteFile({{ result.id }})" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium">حذف</button>
+                                    </div>
+                                </div>
+                            </li>
+                        {% else %}
+                        <li class="px-4 py-4 sm:px-6 text-center text-gray-500">
+                            لا توجد ملفات محللة
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        </div>
+        <div id="gpt_analysis" class="sub-tab-content">
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">الملفات المحللة</h3>
+            </div>
+            <div class="border-t border-gray-200">
+                <ul class="divide-y divide-gray-200">
+                    {% for result in zero_shot_results %}
+                            <li class="px-4 py-4 sm:px-6">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-1">
+                                        <h4 class="text-lg font-medium text-gray-900">
+                                            {{ result.original_text }}
+                                        </h4>
+                                        <p class="mt-1 text-sm text-gray-500">
+                                            تاريخ التحليل: {{ result.formatted_date }}
+                                        </p>
+                                        <p class="mt-1 text-sm text-gray-500">
+                                            نوع التحليل:
+                                            تحليل إحصائي للنص
+                                        </p>
+                                    </div>
+                                    <div class="flex space-x-2 rtl:space-x-reverse">
+                                        <a href="{{ url_for('show_dataset_results', gpt4o_id=result.gpt4_datasets_id, claude_id=result.claude_datasets_id, gemini_id=result.gemini_datasets_id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">عرض النتائج</a>
+                                        <button onclick="deleteFile({{ result.id }})" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium">حذف</button>
+                                    </div>
+                                </div>
+                            </li>
+                        {% else %}
+                        <li class="px-4 py-4 sm:px-6 text-center text-gray-500">
+                            لا توجد ملفات محللة
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+        {{ main_content }}
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <h3>من نحن</h3>
+                <p>منصة متطورة تعتمد على الذكاء الاصطناعي لتسهيل تنظيم وتحليل النصوص العربية.
+                    مما يساعد المستخدمين على الوصول إلى رؤى دقيقة بسرعة وبكفاءة عالية.</p>
+            </div>
+            <div>
+                <h3><a href="{{ url_for('terms') }}">الشروط والأحكام</a></h3>
+                <a href="mailto:bayyinhelp@gmail.com?subject=الدعم%20والمساعدة">الدعم والمساعدة</a> <br>
+                <a href="{{ url_for('faq') }}">الأسئلة الشائعة</a>
+            </div>
+            <div>
+                <h3>تواصل معنا</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <p class="text-center mt-4">جميع الحقوق محفوظة لموقع بيِّن © 2024</p>
+    </footer>
+
+    <script>
+    function switchSubTab(tabId) {
+        // Hide all tab contents
+        document.querySelectorAll('.sub-tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+
+        // Show selected tab content
+        document.getElementById(tabId).classList.add('active');
+
+        // Update tab buttons
+        document.querySelectorAll('.sub-tab-button').forEach(button => {
+            if (button.dataset.tab === tabId) {
+                button.classList.add('border-blue-500', 'text-blue-600');
+                button.classList.remove('border-transparent', 'text-gray-500');
+            } else {
+                button.classList.remove('border-blue-500', 'text-blue-600');
+                button.classList.add('border-transparent', 'text-gray-500');
+            }
+        });
+    }
+
+    function switchTab(tabId) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+
+        // Show selected tab content
+        document.getElementById(tabId).classList.add('active');
+
+        // Update tab buttons
+        document.querySelectorAll('.tab-button').forEach(button => {
+            if (button.dataset.tab === tabId) {
+                button.classList.add('border-blue-500', 'text-blue-600');
+                button.classList.remove('border-transparent', 'text-gray-500');
+            } else {
+                button.classList.remove('border-blue-500', 'text-blue-600');
+                button.classList.add('border-transparent', 'text-gray-500');
+            }
+        });
+    }
+
+    function deleteFile(resultId) {
+        if (confirm('هل أنت متأكد من حذف هذا الملف؟')) {
+            fetch(`/delete_file/${resultId}`, {
+                method: 'DELETE',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('حدث خطأ أثناء حذف الملف');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء حذف الملف');
+            });
+        }
+    }
+</script>
+</body>
+</html>
